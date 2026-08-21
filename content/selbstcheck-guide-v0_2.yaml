@@ -1,0 +1,691 @@
+# Anbieter-Selbstcheck-Leitfaden zu den VIDIS Prüfkriterien V0.2.
+#
+# Einzige Quelle für die Selbstcheck-Inhalte dieses Repos. Sie speist
+#   * skills/vidis-selbstcheck/references/kriterien.md  (Skill-Referenz)
+#   * dist/selbstcheck.json                            (Datenmodell fürs Anbieterportal)
+#   * dist/selbstcheck.html                            (portable interaktive Anleitung)
+# Kriteriumsname, Bereich und Pflichtstatus stammen aus content/kriterien-v0_2.yaml.
+#
+# Felder pro Kriterium:
+#   phase           Selbstcheck-Phase (technik | rechtstexte | vertrag | inhalte)
+#   kurz            Ein Satz in Alltagssprache: was hier verlangt wird.
+#   automatisierung Wie weit das Kriterium maschinell entscheidbar ist.
+#   eingaben        Welche Eingaben die automatisierte Prüfung dafür braucht.
+#   automatisch     Was eine automatisierte Prüfung selbst entscheidet.
+#   grenzen         Was eine automatisierte Prüfung nicht entscheiden kann.
+#   selbst_pruefen  Nachvollziehbare Einzelschritte für die eigene Prüfung.
+#   stolperfallen   Fehler, die in Prüfungen regelmäßig auftreten.
+#   behebung        Konkrete Maßnahmen, wenn das Kriterium nicht erfüllt ist.
+#   nachweise       Belege, die dem Prüfbericht beigelegt werden sollten.
+
+RDS-IPF-364:
+  automatisierung: "automatisiert"
+  eingaben: "Produkt-URL und Quellcode-Pfad."
+  phase: rechtstexte
+  kurz: "Das Impressum ist von jeder Seite des Angebots aus mit einem Klick erreichbar."
+  automatisch: "Die automatisierte Prüfung crawlt die Startseite und weitere Seiten, sucht Links mit Beschriftungen wie Impressum, Imprint oder Anbieterkennzeichnung und prüft, ob die Zielseite mit HTTP 2xx/3xx antwortet."
+  grenzen: "Die automatisierte Prüfung sieht nur den unangemeldeten Seitenstand. Bereiche hinter Login, in Apps oder in eingebetteten Webviews prüft er nur mit --agentic."
+  selbst_pruefen:
+    - "Startseite im Browser öffnen und ganz nach unten scrollen. Ist ein Link mit der Bezeichnung Impressum sichtbar?"
+    - "Denselben Test auf mindestens drei weiteren Seitentypen wiederholen: einer Inhaltsseite, einer Formular- oder Login-Seite und einer Seite im angemeldeten Bereich."
+    - "Browserfenster auf Mobilbreite verkleinern (etwa 375 Pixel). Der Link muss auch dort erreichbar bleiben, auch wenn er in einem Menü liegt."
+    - "Den Link anklicken und prüfen, ob die Impressumsseite ohne Zwischenschritt, ohne Login und ohne Cookie-Zustimmung lädt."
+    - "In der App oder im Webview denselben Weg gehen: Impressum muss dort ebenfalls in maximal zwei Schritten erreichbar sein."
+  stolperfallen:
+    - "Impressum nur auf der Startseite verlinkt, nicht im angemeldeten Bereich."
+    - "Link nur im Desktop-Footer, im mobilen Layout ausgeblendet."
+    - "Impressum erst nach Zustimmung zum Cookie-Banner erreichbar."
+    - "Beschriftung wie Über uns oder Kontakt ohne das Wort Impressum, dadurch nicht leicht erkennbar."
+  behebung:
+    - "Impressumslink in das globale Layout aufnehmen, nicht in eine einzelne Seitenvorlage."
+    - "Link im mobilen Layout sichtbar halten oder in ein dauerhaft erreichbares Menü legen."
+    - "Beschriftung auf Impressum setzen; zusätzliche Bezeichnungen dürfen ergänzen, nicht ersetzen."
+    - "Impressumsseite vom Cookie-Consent und vom Login ausnehmen."
+  nachweise:
+    - "URL der Impressumsseite."
+    - "Screenshots des Links in Desktop- und Mobilansicht sowie im angemeldeten Bereich."
+
+RDS-IPF-365:
+  automatisierung: "automatisiert"
+  eingaben: "Produkt-URL und Quellcode-Pfad."
+  phase: rechtstexte
+  kurz: "Die Datenschutzerklärung ist von jeder Seite des Angebots aus mit einem Klick erreichbar."
+  automatisch: "Die automatisierte Prüfung sucht Links mit Beschriftungen wie Datenschutzerklärung, Datenschutz oder Privacy Policy und prüft die Erreichbarkeit der Zielseite."
+  grenzen: "Wie beim Impressum sieht die automatisierte Prüfung ohne --agentic nur öffentliche Seiten."
+  selbst_pruefen:
+    - "Startseite öffnen und prüfen, ob ein Link mit der Bezeichnung Datenschutzerklärung oder Datenschutz sichtbar ist."
+    - "Denselben Test in Registrierung, Login, Formularen und im angemeldeten Bereich wiederholen. Genau dort wird die Erklärung gebraucht."
+    - "Mobilansicht prüfen, wie beim Impressum."
+    - "Prüfen, dass die Erklärung ohne Login und ohne Cookie-Zustimmung lädt."
+    - "Prüfen, ob die verlinkte Fassung aktuell ist und zum tatsächlich genutzten Produkt gehört, nicht zur Konzern-Webseite."
+  stolperfallen:
+    - "Nur die Konzern-Datenschutzerklärung verlinkt, nicht die des Produkts."
+    - "Datenschutzerklärung ausschließlich als PDF-Download hinterlegt."
+    - "Im Registrierungsformular kein Link, obwohl dort Daten erhoben werden."
+  behebung:
+    - "Produktspezifische Datenschutzerklärung als HTML-Seite bereitstellen und global verlinken."
+    - "Link zusätzlich direkt an jedem Erhebungsformular platzieren."
+  nachweise:
+    - "URL der Datenschutzerklärung."
+    - "Screenshots des Links an Startseite, Registrierung und angemeldetem Bereich."
+
+RDS-IPF-366:
+  automatisierung: "automatisiert"
+  eingaben: "Produkt-URL."
+  phase: rechtstexte
+  kurz: "Das Impressum enthält alle Pflichtangaben nach den Paragrafen 5 und 6 DDG."
+  automatisch: "Die automatisierte Prüfung liest den Text der Impressumsseite und prüft Signale für Name und Anschrift, Rechtsform und Vertretung, Kontaktweg, Registereintrag, Umsatzsteuer- oder Wirtschafts-Identifikationsnummer sowie den aktuellen Rechtsverweis auf das DDG statt auf das TMG. Fehlende Punkte listet der Report namentlich auf."
+  grenzen: "Die automatisierte Prüfung prüft das Vorhandensein von Textmerkmalen, nicht deren inhaltliche Richtigkeit. Ob die genannte Vertretung tatsächlich vertretungsberechtigt ist, kann er nicht bewerten."
+  selbst_pruefen:
+    - "Impressum öffnen und die Pflichtangaben einzeln abgleichen: vollständiger Name des Anbieters, Rechtsform, Ladungsfähige Anschrift mit Straße und Hausnummer, Vertretungsberechtigte Person."
+    - "Kontaktweg prüfen: E-Mail-Adresse und ein zweiter schneller Kontaktweg, üblicherweise Telefonnummer oder Kontaktformular."
+    - "Registereintrag prüfen: Registergericht und Registernummer, sofern das Unternehmen eingetragen ist."
+    - "Umsatzsteuer-Identifikationsnummer oder Wirtschafts-Identifikationsnummer prüfen, sofern vorhanden."
+    - "Rechtsverweise prüfen: Verweise müssen auf das DDG lauten. Verweise auf das TMG sind veraltet."
+    - "Sonderfälle prüfen: Bei zulassungspflichtiger Tätigkeit die Aufsichtsbehörde nennen, bei audiovisuellen Mediendiensten Sitzland und zuständige Landesmedienanstalt."
+  stolperfallen:
+    - "Postfach statt ladungsfähiger Anschrift."
+    - "Verweis auf Paragraf 5 TMG, obwohl das DDG gilt."
+    - "Nur ein Kontaktformular ohne E-Mail-Adresse."
+    - "Registernummer fehlt, obwohl die Gesellschaft eingetragen ist."
+  behebung:
+    - "Fehlende Pflichtangaben laut Report ergänzen; der Report nennt die fehlenden Punkte einzeln."
+    - "Rechtsverweise auf DDG umstellen."
+    - "Angaben mit dem aktuellen Handelsregisterauszug abgleichen."
+  nachweise:
+    - "Impressumstext als PDF oder HTML-Export mit Datum."
+    - "Handelsregisterauszug zur Prüfung der Angaben, intern."
+
+RDS-IPF-367:
+  automatisierung: "automatisiert"
+  eingaben: "Produkt-URL."
+  phase: rechtstexte
+  kurz: "Die Datenschutzerklärung enthält alle Pflichtinformationen nach Artikel 13 und 14 DSGVO."
+  automatisch: "Die automatisierte Prüfung prüft die Datenschutzerklärung auf Signale für Verantwortlichen, Datenschutzbeauftragten, Verarbeitungszwecke, Rechtsgrundlagen, Empfänger, Speicherdauer, Betroffenenrechte inklusive Beschwerde und Widerruf, Folgen der Nichtbereitstellung sowie automatisierte Entscheidungsfindung und Profiling."
+  grenzen: "Die automatisierte Prüfung erkennt, ob die Themen adressiert sind, nicht ob die Angaben rechtlich zutreffend, vollständig und zur tatsächlichen Verarbeitung passend sind. Diese Bewertung bleibt bei einer qualifizierten Person."
+  selbst_pruefen:
+    - "Datenschutzerklärung öffnen und Artikel 13 DSGVO Punkt für Punkt abgleichen."
+    - "Verantwortlicher: Name, Anschrift und Kontaktdaten vorhanden?"
+    - "Datenschutzbeauftragter: Kontaktdaten vorhanden oder begründet, dass keiner bestellt werden muss?"
+    - "Zwecke und Rechtsgrundlagen: Ist jede Verarbeitung einem Zweck und einer Rechtsgrundlage nach Artikel 6 DSGVO zugeordnet?"
+    - "Empfänger: Sind Auftragsverarbeiter und weitere Empfänger benannt, mindestens nach Kategorien?"
+    - "Drittlandtransfer: Ist er benannt und mit Garantien nach Artikel 44 ff. DSGVO belegt?"
+    - "Speicherdauer: Sind konkrete Fristen oder nachvollziehbare Kriterien angegeben?"
+    - "Betroffenenrechte: Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerspruch, Widerruf der Einwilligung und Beschwerderecht bei einer Aufsichtsbehörde."
+    - "Automatisierte Entscheidungsfindung und Profiling: Ist eine Aussage getroffen, auch wenn sie lautet, dass beides nicht stattfindet?"
+    - "Abschließend gegen die eigene Realität prüfen: Steht jede tatsächlich eingesetzte Verarbeitung, jedes Tool und jeder Dienstleister in der Erklärung?"
+  stolperfallen:
+    - "Keine Aussage zu automatisierter Entscheidungsfindung, weil das Thema als nicht relevant übersprungen wurde."
+    - "Speicherdauer nur als soweit erforderlich formuliert, ohne Kriterien."
+    - "Verarbeitungen im Produkt, die in der Erklärung fehlen, etwa Analyse-Tools oder Support-Systeme."
+    - "Erklärung nennt Dienstleister, die längst ausgetauscht wurden."
+  behebung:
+    - "Verarbeitungsverzeichnis und Datenschutzerklärung gegeneinander abgleichen und Lücken schließen."
+    - "Fehlende Pflichtinformationen laut Report ergänzen."
+    - "Erklärung mit Datenschutzbeauftragtem oder Fachjuristin abstimmen und mit Datum versionieren."
+  nachweise:
+    - "Datenschutzerklärung als Export mit Datum und Version."
+    - "Zuordnungstabelle Artikel-13-Pflichtangabe zu Textabschnitt."
+
+RDS-AGB-368:
+  automatisierung: "automatisiert"
+  eingaben: "AGB, Datenschutzerklärung und AVV als Datei oder URL."
+  phase: vertrag
+  kurz: "Die AGB oder Nutzungsbedingungen enthalten keine Klauseln, die gegen Datenschutzgrundsätze verstoßen."
+  automatisch: "Die automatisierte Prüfung analysiert übergebene AGB-Dokumente oder die AGB-URL auf Textmuster, die auf datenschutzwidrige Klauseln hindeuten, und legt Belegstellen in document_capture.json ab."
+  grenzen: "Klauselbewertung ist eine juristische Wertung. Die automatisierte Prüfung liefert Fundstellen und Hinweise, keine Rechtsprüfung. Ohne AGB-Eingabe bleibt das Kriterium MANUELL."
+  selbst_pruefen:
+    - "AGB oder Nutzungsbedingungen als Dokument oder URL bereitstellen und in den Lauf geben."
+    - "Klauseln zur Datennutzung suchen und prüfen, ob eine Nutzung über die Leistungserbringung hinaus eingeräumt wird, etwa zu Werbe-, Analyse- oder Trainingszwecken."
+    - "Prüfen, ob Einwilligungen über AGB-Zustimmung mitverpackt werden. Einwilligung muss getrennt, freiwillig und widerrufbar sein."
+    - "Prüfen, ob Nutzungsrechte an Inhalten von Schülerinnen und Schülern eingeräumt werden, die über den Betrieb hinausgehen."
+    - "Prüfen, ob Haftungs- und Änderungsklauseln datenschutzrelevante Pflichten aushöhlen, etwa einseitige Änderung der Datenverarbeitung."
+    - "Prüfen, ob die AGB zur Datenschutzerklärung widerspruchsfrei sind."
+  stolperfallen:
+    - "Pauschale Einwilligung in Datenverarbeitung als Teil der AGB-Zustimmung."
+    - "Recht zur Nutzung von Nutzerinhalten für Produktverbesserung oder KI-Training ohne Rechtsgrundlage."
+    - "AGB in englischer Fassung maßgeblich, deutsche Fassung nur informativ."
+    - "Widersprüche zwischen AGB und Datenschutzerklärung zur Datennutzung."
+  behebung:
+    - "Datenschutzrelevante Klauseln aus den AGB herauslösen und in die Datenschutzerklärung bzw. den AVV überführen."
+    - "Einwilligungen als eigenen, getrennten Vorgang gestalten."
+    - "AGB juristisch gegen die Datenschutzgrundsätze prüfen lassen und Ergebnis dokumentieren."
+  nachweise:
+    - "AGB-Fassung mit Datum und Version."
+    - "Kurze Klauselbewertung mit Verantwortlicher Person und Datum."
+
+RDS-AGB-369:
+  automatisierung: "automatisiert"
+  eingaben: "AGB, Datenschutzerklärung und AVV als Datei oder URL."
+  phase: vertrag
+  kurz: "Die AGB enthalten keine Klauseln, die den Vorschriften zur Auftragsverarbeitung widersprechen."
+  automatisch: "Die automatisierte Prüfung analysiert AGB und AVV auf Muster zu Weisungsbindung, Subunternehmern, Löschung und Kontrollrechten und legt Belegstellen ab."
+  grenzen: "Ob die Klauseln Artikel 28 DSGVO tatsächlich genügen, ist eine juristische Wertung."
+  selbst_pruefen:
+    - "AVV oder die auftragsverarbeitungsrelevanten AGB-Teile bereitstellen und in den Lauf geben."
+    - "Gegen Artikel 28 Absatz 3 DSGVO abgleichen: Gegenstand und Dauer, Art und Zweck, Art der Daten, Kategorien betroffener Personen."
+    - "Weisungsbindung prüfen: Verarbeitung nur auf dokumentierte Weisung des Auftraggebers."
+    - "Vertraulichkeit und Verpflichtung der eingesetzten Personen prüfen."
+    - "Technische und organisatorische Maßnahmen prüfen: sind sie beschrieben und anlagenfähig?"
+    - "Subunternehmer prüfen: Genehmigungspflicht, Liste, Informationspflicht bei Wechsel, Weitergabe derselben Pflichten."
+    - "Unterstützungspflichten prüfen: Betroffenenrechte, Meldung von Datenschutzverletzungen, Datenschutz-Folgenabschätzung."
+    - "Kontrollrechte prüfen: Auditrechte des Auftraggebers, Nachweise, Zertifikate."
+    - "Beendigung prüfen: Löschung oder Rückgabe nach Wahl des Auftraggebers."
+  stolperfallen:
+    - "Anbieter behält sich vor, Subunternehmer ohne Information zu wechseln."
+    - "Auditrechte auf Selbstauskunft des Anbieters reduziert."
+    - "Kein AVV vorhanden, weil die Rolle fälschlich als eigene Verantwortlichkeit eingeordnet wird."
+    - "AVV verweist auf Anlagen, die nicht mitgeliefert werden."
+  behebung:
+    - "AVV nach Artikel 28 DSGVO vervollständigen, inklusive TOM-Anlage und Subunternehmerliste."
+    - "Widersprüche zwischen AGB und AVV auflösen, Vorrangregel für den AVV aufnehmen."
+  nachweise:
+    - "AVV-Fassung mit Anlagen."
+    - "Aktuelle Subunternehmerliste mit Verarbeitungsort."
+
+RDS-DEV-380:
+  automatisierung: "automatisiert"
+  eingaben: "Quellcode-Pfad sowie AGB, Datenschutzerklärung und AVV als Datei oder URL."
+  phase: vertrag
+  kurz: "Daten werden nur für die Nutzung des Angebots verarbeitet, Werbezwecke sind ausgeschlossen."
+  automatisch: "Die automatisierte Prüfung prüft Dokumente auf Zweckbindungs- und Werbeaussagen und ergänzend den Quellcode auf Werbe- und Tracking-Integrationen."
+  grenzen: "Die tatsächliche Zweckbindung im Betrieb ist aus Text und Code allein nicht vollständig belegbar."
+  selbst_pruefen:
+    - "Verarbeitungsverzeichnis öffnen und je Verarbeitung den Zweck prüfen. Gibt es einen Zweck außerhalb der Leistungserbringung?"
+    - "Datenschutzerklärung und AGB prüfen: Wird Werbung, Profilbildung oder Weitergabe zu Werbezwecken erwähnt oder eingeräumt?"
+    - "Eingesetzte Dienste prüfen: Analyse, A/B-Tests, Marketing-Automation, CRM-Anbindung, Newsletter, Push-Kampagnen."
+    - "Prüfen, ob Produktdaten von Schülerinnen und Schülern in Systeme fließen, die auch für Marketing genutzt werden."
+    - "Prüfen, ob Nutzerdaten für Modelltraining verwendet werden und auf welcher Rechtsgrundlage."
+  stolperfallen:
+    - "Marketing-Tool im Produkt aktiv, obwohl die Erklärung Werbefreiheit zusagt."
+    - "Gemeinsame Datenbank für Schulprodukt und Marketing ohne Trennung."
+    - "Produktverbesserung als Sammelzweck ohne Abgrenzung zu Werbung."
+  behebung:
+    - "Werbe- und Marketing-Integrationen aus dem Bildungsangebot entfernen."
+    - "Zwecke im Verarbeitungsverzeichnis eng und einzeln formulieren."
+    - "Datenflüsse zwischen Produkt und Marketing-Systemen technisch trennen."
+  nachweise:
+    - "Auszug Verarbeitungsverzeichnis mit Zwecken."
+    - "Liste eingesetzter Dienste und Integrationen."
+
+RDS-DEV-381:
+  automatisierung: "automatisiert"
+  eingaben: "AGB, Datenschutzerklärung und AVV als Datei oder URL."
+  phase: vertrag
+  kurz: "Nach Vertragsende werden die Daten des Auftraggebers nach dessen Wahl gelöscht und auf Wunsch herausgegeben."
+  automatisch: "Die automatisierte Prüfung prüft AVV und AGB auf Regelungen zu Löschung, Rückgabe und Fristen nach Vertragsende."
+  grenzen: "Ob der Prozess in der Praxis funktioniert, zeigt nur ein durchgeführter Test oder ein dokumentierter Prozess."
+  selbst_pruefen:
+    - "AVV-Abschnitt zur Beendigung öffnen: Ist Löschung und Herausgabe nach Wahl des Auftraggebers geregelt?"
+    - "Prüfen, ob eine Frist genannt ist und ob sie realistisch ist."
+    - "Prüfen, in welchem Format Daten herausgegeben werden und ob das Format nutzbar ist."
+    - "Backups prüfen: Wann fallen Daten aus Backups heraus, und ist das dokumentiert?"
+    - "Prüfen, ob es einen dokumentierten, geübten Prozess gibt, nicht nur eine Klausel."
+    - "Prüfen, ob Protokoll- und Log-Daten mit erfasst sind."
+  stolperfallen:
+    - "Löschung zugesagt, aber Backups laufen 12 Monate weiter, ohne dass das benannt ist."
+    - "Export nur als PDF, wodurch die Daten praktisch nicht weiterverwendbar sind."
+    - "Kein Löschnachweis vorgesehen."
+  behebung:
+    - "Beendigungsprozess dokumentieren, inklusive Backup-Fristen und Löschprotokoll."
+    - "Maschinenlesbaren Export bereitstellen."
+    - "Löschnachweis als Standardartefakt einführen."
+  nachweise:
+    - "AVV-Abschnitt zur Beendigung."
+    - "Prozessdokumentation Löschung und Herausgabe, inklusive Beispiel-Löschnachweis."
+
+RDS-DEV-466:
+  automatisierung: "automatisiert"
+  eingaben: "AGB, Datenschutzerklärung und AVV als Datei oder URL."
+  phase: vertrag
+  kurz: "Es werden keine Server oder Verarbeitungen in unsicheren Drittländern eingesetzt, auch nicht bei Sub- oder Mutterunternehmen."
+  automatisch: "Die automatisierte Prüfung prüft Dokumente auf Aussagen zu Verarbeitungsorten, Drittlandtransfers und Garantien."
+  grenzen: "Die tatsächliche Infrastruktur- und Konzernstruktur ist nur aus internen Unterlagen belastbar zu belegen."
+  selbst_pruefen:
+    - "Liste aller Verarbeitungsorte erstellen: eigene Rechenzentren, Cloud-Regionen, Backup-Standorte."
+    - "Liste aller Subunternehmer erstellen, inklusive Support, Monitoring, Mail-Versand, CDN und KI-Diensten."
+    - "Je Eintrag das Land der Verarbeitung und das Land des Mutterunternehmens erfassen."
+    - "Prüfen, ob Fernzugriff aus Drittländern möglich ist, etwa durch Support-Teams oder Administratoren."
+    - "Für jeden verbleibenden Drittlandbezug die Garantien nach Artikel 44 ff. DSGVO dokumentieren."
+    - "Prüfen, ob eine Transfer Impact Assessment vorliegt, wo sie erforderlich ist."
+  stolperfallen:
+    - "EU-Region gewählt, Support greift aber aus einem Drittland zu."
+    - "CDN oder Fehler-Monitoring als technische Nebensache übersehen."
+    - "Mutterunternehmen im Drittland mit Zugriffsmöglichkeit nicht betrachtet."
+  behebung:
+    - "Verarbeitungen in EU/EWR verlagern oder Zugriffe technisch und organisatorisch auf EU/EWR begrenzen."
+    - "Subunternehmerliste mit Verarbeitungsort führen und aktuell halten."
+    - "Für unvermeidbare Transfers Garantien und Zusatzmaßnahmen dokumentieren."
+  nachweise:
+    - "Subunternehmerliste mit Verarbeitungsort und Mutterunternehmen."
+    - "Architektur- oder Hostingnachweis mit Regionen."
+
+RDS-DSO-383:
+  automatisierung: "automatisiert"
+  eingaben: "AGB, Datenschutzerklärung und AVV als Datei oder URL."
+  phase: rechtstexte
+  kurz: "Die Kontaktdaten des Datenschutzbeauftragten sind bereitgestellt, oder es ist ein DSB zu benennen."
+  automatisch: "Die automatisierte Prüfung sucht in der Datenschutzerklärung nach Kontaktdaten eines Datenschutzbeauftragten und erkennt auch die ausdrückliche Erklärung, dass kein DSB bestellt ist."
+  grenzen: "Ob eine Bestellpflicht besteht, ist eine rechtliche Bewertung, die die automatisierte Prüfung nicht trifft."
+  selbst_pruefen:
+    - "Datenschutzerklärung öffnen und prüfen, ob Name oder Funktion und ein eigener Kontaktweg des DSB genannt sind."
+    - "Prüfen, ob der Kontaktweg ein direkter ist, etwa datenschutz@ oder eine Postadresse mit Zusatz, und nicht nur die allgemeine Info-Adresse."
+    - "Falls kein DSB bestellt ist: prüfen, ob die Bestellpflicht nach Artikel 37 DSGVO und Paragraf 38 BDSG geprüft und die Prüfung dokumentiert wurde."
+    - "Prüfen, ob die Angaben aktuell sind, insbesondere nach Wechsel eines externen DSB."
+  stolperfallen:
+    - "Nur die allgemeine Unternehmensadresse als DSB-Kontakt."
+    - "Veralteter externer DSB weiterhin genannt."
+    - "Bestellpflicht nie geprüft und nicht dokumentiert."
+  behebung:
+    - "DSB bestellen, sofern erforderlich, und Kontaktdaten in die Datenschutzerklärung aufnehmen."
+    - "Eigenen Kontaktkanal für Datenschutzanfragen einrichten."
+    - "Prüfung der Bestellpflicht schriftlich festhalten."
+  nachweise:
+    - "Abschnitt der Datenschutzerklärung mit DSB-Kontaktdaten."
+    - "Bestellurkunde oder dokumentierte Prüfung der Bestellpflicht."
+
+RDS-CUC-371:
+  automatisierung: "automatisiert"
+  eingaben: "Produkt-URL und Quellcode-Pfad."
+  phase: technik
+  kurz: "Bei einem Angebot für Schülerinnen und Schüler werden keine Cookies gesetzt, die für den Betrieb nicht erforderlich sind."
+  automatisch: "Die automatisierte Prüfung öffnet die Seiten mit einem echten Browser, liest alle gesetzten Cookies aus und stuft sie anhand der Open Cookie Database EDPB und ergänzender Heuristiken als essenziell, nicht essenziell oder prüfpflichtig ein."
+  grenzen: "Cookies, die erst nach Login, nach Zustimmung oder in bestimmten Produktbereichen gesetzt werden, sieht der öffentliche Durchgang nicht. Unbekannte Cookie-Namen bleiben prüfpflichtig."
+  selbst_pruefen:
+    - "Browser mit leerem Profil öffnen, Entwicklerwerkzeuge starten und die Seite laden, ohne im Consent-Banner zuzustimmen."
+    - "Unter Anwendung bzw. Application die Cookies auflisten und jeden Eintrag notieren: Name, Domain, Laufzeit, Zweck."
+    - "Für jeden Cookie die Frage beantworten: Bricht das Produkt ohne ihn? Nur dann ist er erforderlich."
+    - "Typische nicht erforderliche Cookies gezielt suchen: Analyse, A/B-Test, Marketing, Social Media, externe Video-Player."
+    - "Denselben Durchgang im angemeldeten Bereich und in mindestens einer Kernfunktion wiederholen."
+    - "Ergebnis mit der Cookie-Liste in der Datenschutzerklärung abgleichen."
+  stolperfallen:
+    - "Analyse-Cookie schon vor der Zustimmung gesetzt."
+    - "Eingebetteter Video-Player setzt Marketing-Cookies mit dem Seitenaufruf."
+    - "Consent-Banner blockiert nichts, sondern protokolliert nur die Auswahl."
+    - "Cookies erst nach Login gesetzt und deshalb im öffentlichen Durchgang unsichtbar."
+  behebung:
+    - "Nicht erforderliche Cookies für die Zielgruppe Schülerinnen und Schüler vollständig abschalten."
+    - "Externe Einbettungen entfernen oder durch datenschutzfreundliche Varianten mit Klick-vor-Laden ersetzen."
+    - "Sicherstellen, dass Skripte tatsächlich erst nach Zustimmung geladen werden, wo Einwilligung zulässig ist."
+  nachweise:
+    - "Cookie-Inventar aus capture.json oder als Screenshot der Entwicklerwerkzeuge."
+    - "Begründung je Cookie, warum er erforderlich ist."
+
+RDS-CUC-372:
+  automatisierung: "automatisiert"
+  eingaben: "Produkt-URL und Quellcode-Pfad."
+  phase: technik
+  kurz: "Für Schülerinnen und Schüler werden keine einwilligungsbedürftigen Cookies gesetzt; bei Lehrkräften ist eine Einwilligung möglich."
+  automatisch: "Die automatisierte Prüfung bewertet das Cookie-Inventar gegen die gewählte Zielgruppe. Die Zielgruppe steuert die Bewertung, deshalb muss --audience korrekt gesetzt sein."
+  grenzen: "Ob eine vorhandene Einwilligung wirksam ist, bewertet die automatisierte Prüfung nicht."
+  selbst_pruefen:
+    - "Zielgruppe des Angebots festlegen: SuS, Lehrkraefte oder beide. Bei beide gilt der strengere Maßstab für die Bereiche, die Schülerinnen und Schüler nutzen."
+    - "Cookie-Inventar aus dem vorigen Schritt heranziehen und je Cookie prüfen, ob er einwilligungsbedürftig ist."
+    - "Für Lehrkräftebereiche prüfen, ob eine Einwilligung eingeholt wird, bevor der Cookie gesetzt wird."
+    - "Consent-Dialog prüfen: Ablehnen muss gleich einfach erreichbar sein wie Zustimmen, Vorauswahl auf ablehnen."
+    - "Widerruf prüfen: Ist die Einstellung jederzeit erreichbar und wirksam?"
+  stolperfallen:
+    - "Consent-Dialog mit vorausgewählten Häkchen."
+    - "Ablehnen nur über einen zweiten Dialog erreichbar."
+    - "Kein Widerruf im Produkt vorgesehen."
+    - "Gleiche Cookie-Konfiguration für Schüler- und Lehrkräftebereich."
+  behebung:
+    - "Einwilligungsbedürftige Cookies in Schülerbereichen deaktivieren."
+    - "Consent-Dialog gleichwertig gestalten und Widerruf dauerhaft anbieten."
+    - "Cookie-Konfiguration je Zielgruppe trennen."
+  nachweise:
+    - "Screenshots des Consent-Dialogs, erster Aufruf und Widerruf."
+    - "Cookie-Inventar je Zielgruppe."
+
+RDS-CUC-373:
+  automatisierung: "automatisiert"
+  eingaben: "Produkt-URL und Quellcode-Pfad."
+  phase: technik
+  kurz: "Für Schülerinnen und Schüler werden keine Trackingpixel verwendet."
+  automatisch: "Die automatisierte Prüfung beobachtet die Netzwerkanfragen der Seiten und erkennt bekannte Tracking- und Werbe-Endpunkte, Zählpixel und Pixelmuster in Requests und Markup."
+  grenzen: "Selbst gehostete oder unbekannte Pixel-Endpunkte erkennt die automatisierte Prüfung nicht zuverlässig."
+  selbst_pruefen:
+    - "Entwicklerwerkzeuge auf dem Netzwerk-Tab öffnen, Filter auf Bilder setzen und die Seite neu laden."
+    - "Nach Anfragen mit sehr kleinen Bildantworten suchen und deren Zielhost prüfen."
+    - "Im Markup nach img-Elementen mit 1 Pixel Größe oder mit Query-Parametern suchen."
+    - "Nach bekannten Endpunkten suchen, etwa facebook.com/tr, Werbenetzwerke und Analyse-Endpunkte."
+    - "Prüfen, ob Pixel über Tag-Manager nachgeladen werden, und die Tag-Manager-Konfiguration einsehen."
+    - "Durchgang im angemeldeten Bereich wiederholen."
+  stolperfallen:
+    - "Pixel über einen Tag-Manager eingebunden und deshalb im Code nicht sichtbar."
+    - "Pixel nur auf Marketing-Landingpages, die aber vom Produkt verlinkt sind."
+    - "Selbst gehostete Zählpixel, die als eigene Technik ausgeblendet werden."
+  behebung:
+    - "Trackingpixel in allen von Schülerinnen und Schülern erreichbaren Bereichen entfernen."
+    - "Tag-Manager-Container für Bildungsbereiche leeren oder nicht ausliefern."
+  nachweise:
+    - "Netzwerk-Export aus der automatisierten Prüfung oder HAR-Datei."
+    - "Screenshot der Tag-Manager-Konfiguration."
+
+RDS-CUC-374:
+  automatisierung: "teilautomatisiert"
+  eingaben: "Produkt-URL, Quellcode-Pfad sowie eine fachliche Bewertung."
+  phase: technik
+  kurz: "Im Local Storage oder Session Storage liegen keine einwilligungsbedürftigen Daten, wenn das Angebot an Schülerinnen und Schüler gerichtet ist."
+  automatisch: "Die automatisierte Prüfung liest Local Storage und Session Storage aus, listet alle Schlüssel und stuft sie ein. Keine oder nur erlaubte Schlüssel führen zu einer automatischen Bewertung, unbekannte Schlüssel bleiben prüfpflichtig."
+  grenzen: "Der Zweck eines Schlüssels ist aus dem Namen nicht sicher ableitbar. Die Bewertung unbekannter Schlüssel bleibt beim Anbieter."
+  selbst_pruefen:
+    - "Entwicklerwerkzeuge öffnen, Local Storage und Session Storage einsehen und alle Schlüssel notieren."
+    - "Je Schlüssel Zweck, Inhalt und Notwendigkeit dokumentieren. Enthält er personenbezogene Daten?"
+    - "Prüfen, ob der Schlüssel für den Betrieb erforderlich ist, etwa Sitzung, Spracheinstellung, Formularzwischenstand."
+    - "Prüfen, ob Analyse- oder Kennungswerte abgelegt werden, etwa dauerhafte Geräte- oder Nutzerkennungen."
+    - "Durchgang im angemeldeten Bereich wiederholen."
+    - "Sprechende Schlüsselnamen einführen, damit die Zuordnung nachvollziehbar bleibt."
+  stolperfallen:
+    - "Analyse-Bibliothek legt eine dauerhafte Kennung im Local Storage ab, um Cookie-Regeln zu umgehen."
+    - "Unklare Schlüsselnamen wie a1 oder tmp, deren Zweck niemand belegen kann."
+    - "Personenbezogene Inhalte dauerhaft im Local Storage, obwohl Session Storage genügt."
+  behebung:
+    - "Nicht erforderliche Schlüssel entfernen."
+    - "Von Local Storage auf Session Storage wechseln, wo Persistenz nicht nötig ist."
+    - "Schlüsselinventar mit Zweck und Notwendigkeit dokumentieren und im Produkt pflegen."
+  nachweise:
+    - "Storage-Inventar aus dem Lauf, im Report als Klassifikationsliste enthalten."
+    - "Zweckdokumentation je Schlüssel."
+
+RDS-CUC-375:
+  automatisierung: "teilautomatisiert"
+  eingaben: "Produkt-URL, Quellcode-Pfad sowie eine fachliche Bewertung."
+  phase: technik
+  kurz: "Auf dem Endgerät werden keine weiteren einwilligungsbedürftigen Informationen gespeichert oder ausgelesen."
+  automatisch: "Die automatisierte Prüfung sammelt Signale zu IndexedDB, Cache Storage und Service Workern. Die rechtliche Zweckbewertung bleibt manuell."
+  grenzen: "Die automatisierte Prüfung erkennt die Nutzung dieser Speicher, nicht ihren Zweck. Deshalb bleibt das Kriterium bei vorhandenen Signalen prüfpflichtig."
+  selbst_pruefen:
+    - "Entwicklerwerkzeuge öffnen und IndexedDB, Cache Storage und Service Worker einsehen."
+    - "Je Datenbank oder Cache erfassen, welche Daten darin liegen und wozu."
+    - "Prüfen, ob Offline-Funktion oder Performance die Speicherung wirklich erfordert."
+    - "Prüfen, ob personenbezogene Inhalte offline verbleiben und wie sie gelöscht werden."
+    - "Prüfen, ob Geräteinformationen ausgelesen werden, etwa Schriftarten, Sensoren, Media Devices."
+    - "Prüfen, ob ein Service Worker auch nach Abmeldung weiterläuft und Daten behält."
+  stolperfallen:
+    - "Service Worker bleibt nach Logout aktiv und hält Inhalte im Cache."
+    - "IndexedDB mit Lerndaten ohne Löschmechanismus."
+    - "Berechtigungsabfragen für Sensoren ohne Zweckbezug."
+  behebung:
+    - "Speicher auf das für die Funktion Notwendige begrenzen."
+    - "Löschung beim Logout implementieren, inklusive Service-Worker-Caches."
+    - "Zweck je Speicher dokumentieren."
+  nachweise:
+    - "Screenshots von IndexedDB, Cache Storage und Service Workern."
+    - "Zweck- und Löschkonzept für Gerätespeicher."
+
+RDS-CUC-376:
+  automatisierung: "teilautomatisiert"
+  eingaben: "Produkt-URL, Quellcode-Pfad sowie eine fachliche Bewertung."
+  phase: technik
+  kurz: "Es werden keine Browserfingerprints gebildet, wenn sich das Angebot an Schülerinnen und Schüler richtet."
+  automatisch: "Die automatisierte Prüfung erkennt typische Fingerprinting-Signale im Code und im Laufzeitverhalten, etwa Canvas-, WebGL-, Font- und Audio-Abfragen sowie bekannte Fingerprinting-Bibliotheken."
+  grenzen: "Ob eine erkannte Abfrage der Fingerprint-Bildung oder einer legitimen Funktion dient, bleibt eine Bewertung mit Produktkontext."
+  selbst_pruefen:
+    - "Im Quellcode und in den ausgelieferten Bundles nach Fingerprinting-Bibliotheken suchen, etwa fingerprintjs."
+    - "Nach Aufrufen suchen, die typischerweise zur Fingerprint-Bildung dienen: canvas toDataURL, WebGL-Parameter, AudioContext, Schriftartenlisten, enumerateDevices."
+    - "Je Fund prüfen, ob eine Produktfunktion diese Abfrage erfordert, etwa Kameraauswahl in einer Videofunktion."
+    - "Betrugserkennungs- oder Bot-Schutzdienste prüfen; sie bilden häufig Fingerprints."
+    - "Prüfen, ob ein Gerätemerkmal serverseitig gespeichert und zur Wiedererkennung genutzt wird."
+  stolperfallen:
+    - "Bot-Schutz oder Fraud-Detection bildet Fingerprints, wird aber nicht als Tracking betrachtet."
+    - "Fingerprinting in einer Drittanbieter-Bibliothek versteckt."
+    - "Geräteerkennung zur Sitzungsabsicherung ohne Dokumentation und Rechtsgrundlage."
+  behebung:
+    - "Fingerprinting-Bibliotheken in Schülerbereichen entfernen."
+    - "Bot-Schutz auf serverseitige Verfahren ohne Fingerprint umstellen."
+    - "Für notwendige Gerätemerkmale Zweck, Umfang und Rechtsgrundlage dokumentieren."
+  nachweise:
+    - "Code-Fundstellen aus code_capture.json."
+    - "Bewertung je Fundstelle mit Produktbezug."
+
+RDS-CUC-377:
+  automatisierung: "teilautomatisiert"
+  eingaben: "Produkt-URL sowie Produktkontext als Dokument oder AGB-, Datenschutz- und AVV-URL; bleibt der Zweck unklar, ist eine fachliche Bewertung nötig."
+  phase: technik
+  kurz: "Für Schülerinnen und Schüler wird nicht getrackt, außer das Tracking dient pädagogischen Zwecken, etwa in adaptiven Lernsystemen."
+  automatisch: "Die automatisierte Prüfung fasst Tracking-Signale aus Browser, Code und Dokumenten zusammen. PASS oder FAIL entstehen nur, wenn entweder kein Tracker vorhanden ist, ein bekanntes nicht pädagogisches Tracking erkannt wird oder der pädagogische Zweck durch übergebene Dokumente belegt ist."
+  grenzen: "Der pädagogische Zweck ist aus Browsersignalen nicht ableitbar. Ohne Produktkontext bleibt das Kriterium prüfpflichtig."
+  selbst_pruefen:
+    - "Alle Tracking- und Analysemechanismen des Produkts auflisten, auch selbst gebaute Telemetrie."
+    - "Je Mechanismus den Zweck bestimmen: pädagogische Auswertung im Lernprozess oder Produkt-, Marketing- oder Reichweitenanalyse?"
+    - "Für pädagogisches Tracking dokumentieren, welche Lernfunktion darauf beruht und wer die Daten sieht."
+    - "Prüfen, ob die Datenmenge auf die pädagogische Funktion begrenzt ist."
+    - "Prüfen, ob nicht pädagogische Telemetrie deaktiviert oder anonymisiert ist."
+    - "Die Zweckdokumentation der automatisierten Prüfung als Dokument übergeben, damit die Bewertung nicht prüfpflichtig bleibt."
+  stolperfallen:
+    - "Produktanalyse als pädagogisches Tracking bezeichnet."
+    - "Pädagogisches Tracking erhebt mehr Daten als die Lernfunktion benötigt."
+    - "Fehlerprotokolle mit vollständigen Nutzungsprofilen."
+  behebung:
+    - "Tracking auf pädagogisch begründete Datenpunkte reduzieren."
+    - "Produkt-Telemetrie anonymisieren oder abschalten."
+    - "Zweckdokumentation erstellen und mit der Datenschutzerklärung abgleichen."
+  nachweise:
+    - "Zweckdokumentation je Tracking-Mechanismus."
+    - "Datenfeldliste des pädagogischen Trackings."
+
+RDS-CUC-453:
+  automatisierung: "teilautomatisiert"
+  eingaben: "Produkt-URL, AGB, Datenschutzerklärung und AVV als Datei oder URL sowie eine fachliche Bewertung."
+  phase: rechtstexte
+  kurz: "Alle Cookies des Angebots und ihre Zwecke sind in der Datenschutzerklärung beschrieben."
+  automatisch: "Die automatisierte Prüfung gleicht das erhobene Cookie-Inventar mit den Cookie-Beschreibungen in der übergebenen Datenschutzerklärung ab. Fehlt der Text oder ist er unklar, bleibt das Kriterium prüfpflichtig."
+  grenzen: "Ob eine Beschreibung inhaltlich zutrifft, bewertet die automatisierte Prüfung nicht."
+  selbst_pruefen:
+    - "Cookie-Inventar aus dem technischen Durchgang heranziehen, inklusive Local Storage und Session Storage."
+    - "Datenschutzerklärung öffnen und je Eintrag prüfen, ob er dort genannt ist."
+    - "Je Eintrag prüfen, ob Zweck, Anbieter, Speicherdauer und Einstufung als erforderlich oder einwilligungsbedürftig angegeben sind."
+    - "Prüfen, ob die Erklärung auch die Cookies des angemeldeten Bereichs abdeckt."
+    - "Prüfen, ob die Liste aktuell ist; ein Deployment kann neue Cookies eingeführt haben."
+    - "Datenschutzerklärung als Dokument oder URL in den Lauf geben, damit der Abgleich automatisch erfolgt."
+  stolperfallen:
+    - "Cookie-Tabelle veraltet, weil sie nicht Teil des Release-Prozesses ist."
+    - "Cookies von Drittanbietern nur pauschal als externe Dienste erwähnt."
+    - "Local Storage und Session Storage fehlen in der Beschreibung."
+  behebung:
+    - "Cookie-Tabelle in der Datenschutzerklärung vervollständigen, inklusive Browser-Speicher."
+    - "Aktualisierung der Tabelle in die Release-Checkliste aufnehmen."
+  nachweise:
+    - "Gegenüberstellung Cookie-Inventar zu Cookie-Tabelle."
+    - "Datum der letzten Aktualisierung der Tabelle."
+
+RDS-CDN-379:
+  automatisierung: "automatisiert"
+  eingaben: "Quellcode-Pfad."
+  phase: technik
+  kurz: "Ein eingesetztes CDN dient ausschließlich der Bereitstellung von Inhalten und erfüllt die Anforderungen an Dienstleister."
+  automatisch: "Die automatisierte Prüfung prüft den Quellcode auf CDN-Einbindungen und externe Auslieferungsdomains."
+  grenzen: "Der Funktionsumfang und die vertragliche Ausgestaltung des CDN sind nur aus Konfiguration und Vertrag zu belegen; dafür ist ein Quellcode-Pfad und interne Dokumentation nötig."
+  selbst_pruefen:
+    - "Alle CDN- und Edge-Dienste auflisten, inklusive Bild-, Font- und Skript-Hosts."
+    - "Je Dienst prüfen, welche Funktionen aktiv sind: reine Auslieferung, oder zusätzlich Bot-Schutz, Analytics, A/B-Test, Edge-Personalisierung?"
+    - "Prüfen, ob TLS am Edge terminiert und ob dabei Inhalte einsehbar sind."
+    - "Prüfen, ob Zugriffsprotokolle beim CDN entstehen, wie lange sie bleiben und wer sie sieht."
+    - "Prüfen, ob AVV und Verarbeitungsort für den CDN-Anbieter dokumentiert sind."
+    - "Externe Fonts und Skripte prüfen: sie übertragen IP-Adressen an Dritte und lassen sich meist selbst hosten."
+  stolperfallen:
+    - "CDN-Analytics oder Bot-Schutz aktiv, dadurch mehr als reine Auslieferung."
+    - "Google Fonts oder Skripte direkt von Drittanbieter-Domains geladen."
+    - "CDN-Anbieter nicht in der Subunternehmerliste."
+  behebung:
+    - "CDN-Zusatzfunktionen abschalten, die über die Auslieferung hinausgehen."
+    - "Fonts und Skripte selbst hosten."
+    - "CDN in Subunternehmerliste und AVV aufnehmen, Verarbeitungsort dokumentieren."
+  nachweise:
+    - "CDN-Konfigurationsübersicht mit aktiven Funktionen."
+    - "AVV des CDN-Anbieters und Verarbeitungsort."
+
+RDS-SPE-370:
+  automatisierung: "automatisiert"
+  eingaben: "AGB, Datenschutzerklärung und AVV als Datei oder URL."
+  phase: inhalte
+  kurz: "Sponsoring, Produktplatzierungen und wirtschaftliche Interessen sind transparent gekennzeichnet."
+  automatisch: "Die automatisierte Prüfung klassifiziert Dokumente auf Sponsoring-Hinweise und wertet Kennzeichnungsbegriffe im Seiteninhalt aus. Ohne belastbare Hinweise bleibt das Kriterium prüfpflichtig."
+  grenzen: "Ob eine Platzierung als Sponsoring einzuordnen ist, ist eine inhaltliche Bewertung."
+  selbst_pruefen:
+    - "Alle wirtschaftlichen Beziehungen auflisten, die im Angebot sichtbar werden: Sponsoren, Partner, Förderer, Lizenzgeber."
+    - "Je Beziehung prüfen, wo sie im Produkt sichtbar wird und wie sie gekennzeichnet ist."
+    - "Prüfen, ob Logos oder Nennungen mit Verlinkung als Werbung wirken können."
+    - "Prüfen, ob gesponserte Inhalte redaktionell von neutralen Inhalten unterscheidbar sind."
+    - "Prüfen, ob die Kennzeichnung für Schülerinnen und Schüler verständlich ist."
+  stolperfallen:
+    - "Sponsorenlogo auf Lerninhaltsseiten ohne Kennzeichnung."
+    - "Gefördert von im Footer, während Sponsoren im Inhalt wiederholt auftauchen."
+    - "Verlinkte Partnerlogos, die zu Produktseiten führen."
+  behebung:
+    - "Sponsoring eindeutig kennzeichnen und von Lerninhalten trennen."
+    - "Verlinkungen aus Schülerbereichen entfernen."
+    - "Sponsoring-Konzept dokumentieren und dem Prüfbericht beilegen."
+  nachweise:
+    - "Liste der Sponsoring- und Partnerbeziehungen."
+    - "Screenshots der Kennzeichnung im Produkt."
+
+RDS-VIN-354:
+  automatisierung: "automatisiert"
+  eingaben: "Produkt-URL."
+  phase: inhalte
+  kurz: "Das Angebot ist jugendmedienschutzrechtlich unbedenklich."
+  automatisch: "Die automatisierte Prüfung prüft Seiteninhalte auf Altersgrenzen-Hinweise, jugendschutzrelevante Begriffe und Einbettungen von Plattformen mit ungefiltertem Fremdinhalt."
+  grenzen: "Eine jugendmedienschutzrechtliche Bewertung von Inhalten ist eine fachliche Einschätzung; Text- und Linksignale sind nur Anhaltspunkte."
+  selbst_pruefen:
+    - "Alle Inhaltsquellen auflisten: eigene Inhalte, Inhalte Dritter, nutzergenerierte Inhalte, eingebettete Plattformen."
+    - "Prüfen, ob nutzergenerierte Inhalte moderiert werden und wie."
+    - "Eingebettete Plattformen prüfen: führt eine Einbettung zu Empfehlungen mit Fremdinhalt?"
+    - "Externe Links aus Schülerbereichen stichprobenartig aufrufen und Zielinhalte bewerten."
+    - "Prüfen, ob Kommunikationsfunktionen Kontaktrisiken erzeugen und wie sie abgesichert sind."
+    - "Prüfen, ob ein Melde- und Beschwerdeweg vorhanden und erreichbar ist."
+    - "Prüfen, ob Alterskennzeichnung und Zielgruppenzuschnitt zusammenpassen."
+  stolperfallen:
+    - "Eingebettetes Video mit anschließenden Empfehlungen aus dem allgemeinen Plattformbestand."
+    - "Chat- oder Kommentarfunktion ohne Moderation und ohne Meldefunktion."
+    - "Externe Links auf Seiten mit altersbeschränkten Inhalten."
+  behebung:
+    - "Einbettungen auf jugendschutzkonforme Modi umstellen oder Inhalte selbst hosten."
+    - "Moderation und Meldefunktion einführen."
+    - "Externe Verlinkungen aus Schülerbereichen prüfen und einschränken."
+  nachweise:
+    - "Inhaltsquellen- und Moderationskonzept."
+    - "Liste externer Links aus Schülerbereichen mit Bewertung."
+
+RDS-WER-384:
+  automatisierung: "automatisiert"
+  eingaben: "Produkt-URL."
+  phase: inhalte
+  kurz: "Das Bildungsangebot ist werbefrei, soweit nicht eine Ausnahme für Lehr- und Lernmittel greift."
+  automatisch: "Die automatisierte Prüfung erkennt Werbenetzwerke und Werbepfade in Netzwerkanfragen und Markup, außerdem Kennzeichnungsbegriffe wie Anzeige, Werbung oder Sponsored und Affiliate-Parameter in Links."
+  grenzen: "Eigenwerbung, Upselling und produktinterne Empfehlungen sind inhaltlich zu bewerten und nicht allein aus Signalen erkennbar."
+  selbst_pruefen:
+    - "Produkt mit leerem Browserprofil durchklicken und auf Werbeflächen, Banner, Interstitials und gesponserte Kacheln achten."
+    - "Prüfen, ob Werbe- oder Affiliate-Netzwerke eingebunden sind."
+    - "Eigenwerbung prüfen: Upgrade-Hinweise, Upselling, Cross-Selling in Schülerbereichen."
+    - "Prüfen, ob kostenlose und kostenpflichtige Varianten unterschiedlich werbebehaftet sind, und die geprüfte Variante festhalten."
+    - "Prüfen, ob eine Ausnahme für Lehr- und Lernmittel greift, und die Begründung dokumentieren."
+    - "Durchgang für Schüler- und Lehrkräfteperspektive getrennt durchführen."
+  stolperfallen:
+    - "Kostenlose Variante mit Werbung, geprüft wurde aber die bezahlte Variante."
+    - "Upgrade-Werbung in Schülerbereichen als Produktinformation eingeordnet."
+    - "Affiliate-Links in Materialempfehlungen."
+  behebung:
+    - "Werbung aus allen von Schülerinnen und Schülern erreichbaren Bereichen entfernen."
+    - "Upselling auf Verwaltungs- und Lehrkräftebereiche begrenzen."
+    - "Affiliate-Parameter aus Links entfernen."
+  nachweise:
+    - "Screenshots der geprüften Bereiche je Perspektive."
+    - "Angabe der geprüften Produktvariante und Lizenz."
+
+RDS-WER-385:
+  automatisierung: "automatisiert"
+  eingaben: "Produkt-URL."
+  phase: inhalte
+  kurz: "Aus Schülerbereichen wird nicht auf Zielseiten verlinkt, die Werbung enthalten."
+  automatisch: "Die automatisierte Prüfung sammelt ausgehende Links und prüft Zielhosts sowie Werbe- und Affiliate-Muster."
+  grenzen: "Die automatisierte Prüfung bewertet nicht jede Zielseite inhaltlich. Zielseiten können sich zudem jederzeit ändern."
+  selbst_pruefen:
+    - "Alle externen Links auflisten, die Schülerinnen und Schüler erreichen können, inklusive Links in Lerninhalten und Materialien."
+    - "Zielseiten stichprobenartig mit leerem Browserprofil aufrufen und auf Werbung prüfen."
+    - "Prüfen, ob Links auf Plattformen führen, die Werbung ausspielen, etwa Videoplattformen oder Nachrichtenportale."
+    - "Prüfen, ob Links Tracking- oder Affiliate-Parameter tragen."
+    - "Prüfen, ob es einen Prozess gibt, der verlinkte Zielseiten wiederkehrend überprüft."
+  stolperfallen:
+    - "Verlinkung auf Videoplattform mit Werbung vor dem Inhalt."
+    - "Redaktionell gepflegte Materiallisten ohne wiederkehrende Prüfung."
+    - "Weiterleitungsdienste, die die eigentliche Zielseite verdecken."
+  behebung:
+    - "Werbebehaftete Ziele durch werbefreie Alternativen ersetzen oder Inhalte selbst bereitstellen."
+    - "Wiederkehrende Linkprüfung einführen und dokumentieren."
+  nachweise:
+    - "Linkliste mit Zielbewertung und Prüfdatum."
+    - "Beschreibung des Prozesses zur Linkpflege."
+
+ITS-ENC-359:
+  automatisierung: "automatisiert"
+  eingaben: "Produkt-URL."
+  phase: technik
+  kurz: "Alle Seiten des Angebots sind ausschließlich über https erreichbar."
+  automatisch: "Die automatisierte Prüfung ruft die Zielseiten über http und https auf und bewertet, ob Inhalte unverschlüsselt ausgeliefert werden."
+  grenzen: "Die automatisierte Prüfung prüft die erreichten Seiten. Weitere Hosts, Subdomains und APIs sind nur enthalten, wenn sie im Crawl auftauchen."
+  selbst_pruefen:
+    - "Alle Hostnamen des Angebots auflisten: Web, API, Assets, Login, Statusseite, Admin."
+    - "Je Host die http-Variante aufrufen und prüfen, ob Inhalte ausgeliefert werden statt einer Weiterleitung."
+    - "Prüfen, ob Mixed Content auftritt: in den Entwicklerwerkzeugen auf Warnungen zu unverschlüsselten Ressourcen achten."
+    - "Prüfen, ob HSTS gesetzt ist und mit welcher Laufzeit."
+    - "Zertifikat prüfen: Gültigkeit, Kette, Abdeckung aller Hostnamen."
+  stolperfallen:
+    - "Asset- oder API-Subdomain ohne https-Erzwingung."
+    - "Mixed Content durch eine einzelne http-Ressource."
+    - "Zertifikat deckt www ab, die Apex-Domain aber nicht."
+  behebung:
+    - "https auf allen Hosts erzwingen und http nur für die Weiterleitung offen halten."
+    - "HSTS mit ausreichender Laufzeit setzen."
+    - "Alle Ressourcen auf https umstellen."
+  nachweise:
+    - "Hostliste mit Prüfergebnis je Host."
+    - "Zertifikats- und HSTS-Nachweis."
+
+ITS-ENC-360:
+  automatisierung: "automatisiert"
+  eingaben: "Produkt-URL."
+  phase: technik
+  kurz: "Aufrufe über http werden auf https umgeleitet."
+  automatisch: "Die automatisierte Prüfung ruft die http-Variante auf und prüft Statuscode und Ziel der Weiterleitung."
+  grenzen: "Die automatisierte Prüfung prüft die im Crawl erreichten Hosts, nicht zwingend alle Subdomains."
+  selbst_pruefen:
+    - "Je Host die http-Variante aufrufen und den Statuscode prüfen. Erwartet wird 301 auf die https-Adresse."
+    - "Prüfen, ob die Weiterleitung direkt auf https führt und nicht über weitere http-Zwischenstationen."
+    - "Prüfen, ob der Pfad bei der Weiterleitung erhalten bleibt."
+    - "Prüfen, ob auch Unterseiten und nicht nur die Startseite weitergeleitet werden."
+    - "Weiterleitung für alle Subdomains prüfen."
+  stolperfallen:
+    - "Weiterleitung nur auf der Startseite konfiguriert."
+    - "302 statt 301, dadurch keine dauerhafte Weiterleitung."
+    - "Weiterleitungskette mit einem http-Zwischenschritt."
+  behebung:
+    - "Dauerhafte Weiterleitung von http auf https für alle Hosts und Pfade konfigurieren."
+    - "Weiterleitungsketten auf einen Schritt reduzieren."
+  nachweise:
+    - "Aufzeichnung der Weiterleitung je Host, etwa als curl-Ausgabe."
+
+ITS-ENC-361:
+  automatisierung: "automatisiert"
+  eingaben: "Produkt-URL."
+  phase: technik
+  kurz: "Veraltete TLS- und SSL-Protokolle werden abgelehnt."
+  automatisch: "Die automatisierte Prüfung versucht Verbindungen mit SSLv3, TLS 1.0 und TLS 1.1 und bewertet, ob der Server sie ablehnt."
+  grenzen: "Die automatisierte Prüfung prüft Protokollversionen. Cipher-Suiten, Schlüssellängen und Konfigurationsdetails prüft er nicht abschließend."
+  selbst_pruefen:
+    - "Je Host prüfen, ob Verbindungen mit TLS 1.0 und TLS 1.1 abgelehnt werden."
+    - "Prüfen, ob TLS 1.2 und TLS 1.3 verfügbar sind."
+    - "Cipher-Suiten prüfen und veraltete Verfahren ausschließen."
+    - "Prüfen, ob alle Hosts dieselbe Konfiguration haben, auch API und Assets."
+    - "Prüfen, ob eingesetzte Load Balancer oder CDNs eigene TLS-Konfigurationen mitbringen."
+  stolperfallen:
+    - "TLS 1.2 nur auf dem Webhost erzwungen, API-Host bleibt offen."
+    - "CDN erlaubt ältere Protokolle, obwohl der Origin sie ablehnt."
+    - "Alte Konfiguration bleibt aktiv, weil sie nur an einer Stelle geändert wurde."
+  behebung:
+    - "TLS 1.0 und 1.1 auf allen Hosts und Terminierungspunkten abschalten."
+    - "Konfiguration zentral verwalten und wiederkehrend prüfen."
+  nachweise:
+    - "TLS-Prüfergebnis je Host."
+    - "Konfigurationsauszug des TLS-Terminierungspunkts."

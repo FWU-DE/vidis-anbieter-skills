@@ -1,0 +1,245 @@
+# VIDIS Prüfkriterien V0.2 — Kriterienregistry.
+#
+# Eigenständige Kopie der aktiven Kriterien: Code, Name, Prüfbereich,
+# Pflichtstatus und Kriteriumstext. Diese Datei ist die Grundlage für die
+# Selbstcheck-Skills und wird zusammen mit selbstcheck-guide-v0_2.yaml gepflegt.
+#
+# 26 Kriterien, Bereiche: ITS, RDS.
+
+ITS-ENC-359:
+  area: ITS
+  description: 'Seiten des Angebots sind ausschließlich über https abrufbar.
+
+    '
+  must: true
+  name: Website nur über https:// aufrufbar
+ITS-ENC-360:
+  area: ITS
+  description: 'Es sind Umleitungen von http auf https konfiguriert.
+
+    '
+  must: true
+  name: Es sind Umleitungen von http auf https konfiguriert.
+ITS-ENC-361:
+  area: ITS
+  description: 'Veraltete TLS/SSL-Protokolle werden abgelehnt.
+
+    '
+  must: true
+  name: Ablehnen veralteter TLS/SSL-Protokolle
+RDS-AGB-368:
+  area: RDS
+  description: 'Die Nutzungsbedingungen oder AGB des Angebots enthalten keine Klauseln, die gegen die
+    Grundsätze des Datenschutzes verstoßen.
+
+    '
+  must: true
+  name: 'Nutzungsbedingungen/AGB: Datenschutzkonform'
+RDS-AGB-369:
+  area: RDS
+  description: 'Die Nutzungsbedingungen oder AGB des Angebots enthalten keine Klauseln, die gegen die
+    Vorschriften zur Auftragsverarbeitung verstoßen.
+
+    '
+  must: true
+  name: 'Nutzungsbedingungen/AGB: AVV-konform'
+RDS-CDN-379:
+  area: RDS
+  description: 'Es wird kein CDN genutzt, das nicht ausschließlich der reinen Bereitstellung von Inhalten
+    dient.
+
+    Darüber hinaus erfüllt das CDN die Voraussetzungen des Prüfunterbereichs Dienstleister.
+
+    '
+  must: true
+  name: CDN nur zur Bereitstellung von Inhalten
+RDS-CUC-371:
+  area: RDS
+  description: 'Es werden keine Cookies gesetzt, die für den Betrieb der Webseite nicht erforderlich sind,
+    sofern sich diese an die Nutzergruppe der Schülerinnen und Schüler richten.
+
+    Richtet sich das Angebot an Lehrkräfte, wird dafür eine entsprechende Einwilligung eingeholt.
+
+    '
+  must: true
+  name: Nicht essenzielle Cookies
+RDS-CUC-372:
+  area: RDS
+  description: 'Es werden keine Cookies gesetzt, für die eine Einwilligung erforderlich ist, sofern sich
+    das Angebot an die Nutzergruppe der Schülerinnen und Schüler richtet.
+
+    Richtet sich das Angebot an Lehrkräfte, kann die Einwilligung eingeholt werden.
+
+    '
+  must: true
+  name: Cookies allgemein
+RDS-CUC-373:
+  area: RDS
+  description: 'Es werden keine Trackingpixel verwendet, wenn sich ein Angebot an Schülerinnen und Schüler
+    richtet.
+
+    Richtet sich das Angebot an Lehrkräfte, wird dafür eine entsprechende Einwilligung eingeholt.
+
+    '
+  must: true
+  name: Trackingpixel
+RDS-CUC-374:
+  area: RDS
+  description: 'Es werden keine Daten im Local Browser Storage oder Session Storage abgelegt, sofern dafür
+    eine Einwilligung erforderlich ist und sich das Angebot an die Nutzergruppe der Schülerinnen und Schüler
+    richtet.
+
+    Richtet sich das Angebot an Lehrkräfte, darf die Einwilligung eingeholt werden.
+
+    Dies schützt die Privatsphäre der Schülerinnen und Schüler und gewährleistet die Einhaltung datenschutzrechtlicher
+    Anforderungen.
+
+    '
+  must: true
+  name: Local Browser Storage
+RDS-CUC-375:
+  area: RDS
+  description: 'Es werden keine sonstigen Informationen auf der Endeinrichtung des Endnutzers gespeichert
+    und es erfolgt kein Zugriff auf Informationen, die bereits in der Endeinrichtung gespeichert sind,
+    sofern dafür eine Einwilligung erforderlich ist und sich das Angebot an die Nutzergruppe der Schülerinnen
+    und Schüler richtet.
+
+    Richtet sich das Angebot an Lehrkräfte, darf die Einwilligung eingeholt werden.
+
+    '
+  must: true
+  name: Informationen auf der Endeinrichtung des Endnutzers
+RDS-CUC-376:
+  area: RDS
+  description: 'Es werden keine Browserfingerprints gebildet, wenn sich ein Angebot an Schülerinnen und
+    Schüler richtet.
+
+    Richtet sich das Angebot an Lehrkräfte, wird dafür eine entsprechende Einwilligung eingeholt
+
+    '
+  must: true
+  name: Browserfingerprints
+RDS-CUC-377:
+  area: RDS
+  description: 'Es werden keine Trackingmechanismen eingesetzt, wenn sich ein Angebot an Schülerinnen
+    und Schüler richtet, es sei denn, das Nutzerverhalten wird aus pädagogischen Gründen getrackt, wie
+    z. B. bei adaptiven Lernsystemen notwendig.
+
+    Richtet sich das Angebot an Lehrkräfte, wird dafür eine entsprechende Einwilligung eingeholt.
+
+    '
+  must: true
+  name: Trackingmechanismen zu nicht pädagogischen Zwecken
+RDS-CUC-453:
+  area: RDS
+  description: 'Bei der Nutzung von Web-Browsern, als auch bei der Nutzung von Mobile Apps (Webansichten,
+    integrierte Browserumgebungen) können sog. "Cookies" genutzt werden.
+
+    Der Anbieter beschreibt alle "Cookies" seines Angebots und deren Zwecke in der Datenschutzerklärung
+
+    '
+  must: true
+  name: Beschreibung aller Cookies
+RDS-DEV-380:
+  area: RDS
+  description: 'Daten werden ausschließlich für die Nutzung des Angebots verarbeitet.
+
+    Insbesondere eine Nutzung zu Werbezwecken ist ausgeschlossen.
+
+    '
+  must: true
+  name: Datenerhebung und -verarbeitung
+RDS-DEV-381:
+  area: RDS
+  description: 'Nach Beendigung der Zusammenarbeit mit dem Auftraggeber werden die Daten des Auftraggebers
+    (also beispielsweise die Daten sämtlicher Schülerinnen und Schüler sowie Lehrkräfte einer Schule,
+    mit der ein Vertrag zur Auftragsverarbeitung geschlossen wurde) nach Wahl des Auftraggebers gelöscht
+    und, wenn gewünscht, an diesen herausgegeben.
+
+    '
+  must: true
+  name: Umgang mit Daten nach Beendigung der Zusammenarbeit
+RDS-DEV-466:
+  area: RDS
+  description: 'Es werden keine Server in unsicheren Drittländern eingesetzt und/oder Datenverarbeitungen
+    in unsicheren Drittländern durchgeführt.
+
+    Dies gilt auch für Sub- oder Mutterunternehmen.
+
+    '
+  must: true
+  name: Sichere Datenverarbeitung
+RDS-DSO-383:
+  area: RDS
+  description: 'Der Anbieter stellt die Kontaktdaten des Datenschutzbeauftragten bereit.
+
+    Falls noch kein Datenschutzbeauftragter existiert, benennt der Anbieter den DSB.
+
+    '
+  must: true
+  name: Benennung eines Datenschutzbeauftragten
+RDS-IPF-364:
+  area: RDS
+  description: 'Ein stets verfügbares und leicht erkennbares Impressum ist von allen Seiten erreichbar.
+
+    Dies gilt insbesondere bei Angeboten mit responsiven Designs
+
+    '
+  must: true
+  name: Leicht auffindbares Impressum
+RDS-IPF-365:
+  area: RDS
+  description: 'Eine stets verfügbare und leicht erkennbare Datenschutzerklärung ist von allen Seiten
+    erreichbar.
+
+    Dies gilt insbesondere bei Angeboten mit responsiven Designs.
+
+    '
+  must: true
+  name: Leicht auffindbare Datenschutzerklärung
+RDS-IPF-366:
+  area: RDS
+  description: 'Das Impressum enthält alle nach § § 5 und 6 DDG vorgeschriebenen Informationen.
+
+    '
+  must: true
+  name: Vollständiges Impressum
+RDS-IPF-367:
+  area: RDS
+  description: 'Die Datenschutzerklärung enthält alle Informationen, die nach Art. 13 und 14 DSGVO vorgeschrieben
+    sind.
+
+    '
+  must: true
+  name: Vollständige Datenschutzerklärung
+RDS-SPE-370:
+  area: RDS
+  description: 'Sponsoring, Produktplatzierungen und sonstige wirtschaftliche Interessen sind transparent
+    zu kennzeichnen; fehlen belastbare Dokumenthinweise, ist eine manuelle Prüfung erforderlich.
+
+    '
+  must: true
+  name: Sponsoring
+RDS-VIN-354:
+  area: RDS
+  description: 'Das Angebot ist jugendmedienschutzrechtlich unbedenklich.
+
+    '
+  must: true
+  name: Jugendmedienschutz
+RDS-WER-384:
+  area: RDS
+  description: 'Das digitale Bildungsangebot ist werbefrei, es sei denn, eine konkrete Werbung ist nach
+    den einschlägigen Bestimmungen für Lehr- und Lernmittel ausnahmsweise zulässig
+
+    '
+  must: true
+  name: Werbefreiheit
+RDS-WER-385:
+  area: RDS
+  description: 'Aus dem Angebot wird für Nutzende der Benutzergruppe Schülerinnen und Schüler nicht auf
+    Zielseiten verlinkt werden, die Werbung enthalten.
+
+    '
+  must: true
+  name: Verweise auf Werbeinhalte
