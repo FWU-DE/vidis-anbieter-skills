@@ -260,7 +260,102 @@ done
 jedes Tool und jeder Dienstleister in der Erklärung? Vergleiche die Liste der Fremd-Domains aus
 Schritt 4 mit den in der Erklärung genannten Empfängern. Differenzen sind Befunde.
 
-## 7. Angemeldeter Bereich
+## 7. Quellcode — was der Browser nicht zeigt
+
+Frage nach dem Repository, auch wenn es nicht angeboten wird. Rund ein Drittel der technischen
+Befunde ist am laufenden Produkt nicht sichtbar: ein Pixel aus dem Tag-Manager erscheint nur auf
+der Seite mit genau der Konfiguration, Cookies in selten erreichten Pfaden gar nicht. Im Code
+stehen sie immer.
+
+Setze `REPO` auf den Pfad und arbeite die Liste ab. `grep -rn` ohne `node_modules`, `dist`,
+`build`, `vendor` — sonst durchsuchst du Fremdcode statt des Angebots.
+
+```bash
+REPO=/pfad/zum/repo
+AUS="--exclude-dir=node_modules --exclude-dir=dist --exclude-dir=build --exclude-dir=vendor --exclude-dir=.git"
+```
+
+**Cookies, die serverseitig gesetzt werden** (RDS-CUC-371, 372) — im Browser nur sichtbar, wenn
+man die Route trifft:
+
+```bash
+grep -rniE 'set-cookie|setcookie|res\.cookie|addCookie|new Cookie\(|cookies\.set' $AUS "$REPO"
+```
+
+**Browser-Speicher** (RDS-CUC-374, 375):
+
+```bash
+grep -rniE 'localStorage\.setItem|sessionStorage\.setItem|indexedDB\.open|caches\.open|serviceWorker\.register' $AUS "$REPO"
+```
+
+**Tracking, Analyse, Tag-Manager** (RDS-CUC-373, 377) — der wichtigste Fund, weil hier meist
+nachgeladen wird:
+
+```bash
+grep -rniE 'googletagmanager|gtag\(|dataLayer|google-analytics|analytics\.js|matomo|piwik|hotjar|clarity|segment|mixpanel|amplitude|posthog|plausible|facebook\.net|fbq\(' $AUS "$REPO"
+```
+
+**Fingerprinting** (RDS-CUC-376):
+
+```bash
+grep -rniE 'fingerprintjs|fpjs|clientjs|canvas.*todataurl|getimagedata|audiocontext|enumeratedevices|document\.fonts' $AUS "$REPO"
+```
+
+**Werbung und Affiliate** (RDS-WER-384, 385):
+
+```bash
+grep -rniE 'adsbygoogle|googlesyndication|doubleclick|adnxs|criteo|taboola|outbrain|amazon-adsystem|aff_id|affiliate' $AUS "$REPO"
+```
+
+**CDN, Fonts und externe Hosts** (RDS-CDN-379) — extern geladene Fonts übertragen IP-Adressen an
+Dritte und lassen sich fast immer selbst hosten:
+
+```bash
+grep -rhoE 'https?://[a-zA-Z0-9.-]+' $AUS "$REPO" \
+  --include='*.html' --include='*.js' --include='*.ts' --include='*.jsx' --include='*.tsx' \
+  --include='*.css' --include='*.scss' --include='*.vue' \
+  | sed 's|https\?://||' | sort | uniq -c | sort -rn | head -40
+```
+
+**Abhängigkeiten** — oft der schnellste Weg zu einem Tracker, den niemand mehr auf dem Schirm hat:
+
+```bash
+for datei in package.json pom.xml requirements.txt go.mod build.gradle composer.json; do
+  [ -f "$REPO/$datei" ] && echo "--- $datei ---" && grep -iE \
+    'analytics|tracking|gtag|tagmanager|matomo|piwik|hotjar|sentry|fingerprint|advert|adsense|facebook' \
+    "$REPO/$datei"
+done
+```
+
+**Rechtstexte in Templates** (RDS-IPF-364, 365) — zeigt, ob der Link wirklich global im Layout
+liegt oder nur auf einzelnen Seiten:
+
+```bash
+grep -rniE 'impressum|imprint|datenschutz|privacy' $AUS "$REPO" \
+  --include='*.html' --include='*.jsx' --include='*.tsx' --include='*.vue' | head -30
+```
+
+**Drittländer und Verarbeitungsorte** (RDS-DEV-466) — Hinweise, keine Belege; die Liste der
+Subunternehmer bleibt eine Frage an den Anbieter:
+
+```bash
+grep -rniE 'region|us-east|us-west|eu-central|ap-southeast|endpoint' $AUS "$REPO" \
+  --include='*.tf' --include='*.yaml' --include='*.yml' --include='*.env*' | head -30
+```
+
+**Auswertung.** Jeder Fund ist ein *Anhaltspunkt*, kein Befund. Toter Code, ein abgeschalteter
+Feature-Flag oder eine Test-Fixture zählen nicht. Prüfe für jeden relevanten Fund:
+
+1. Wird das im ausgelieferten Build wirklich geladen? Grep im gebauten Bundle, nicht nur in der
+   Quelle.
+2. Gilt es für die geprüfte Zielgruppe, oder nur im Lehrkräfte-/Admin-Bereich?
+3. Bestätigt der Browser-Durchgang aus Schritt 3 und 4 den Fund? Widerspruch heißt: nachfragen,
+   nicht raten.
+
+Was du nur im Code gesehen und nicht im Browser bestätigt hast, gehört als solches in die Notiz —
+mit Dateipfad und Zeile als Nachweis.
+
+## 8. Angemeldeter Bereich
 
 Wiederhole Schritte 3 bis 6 nach dem Login, **getrennt** für Schüler- und Lehrkräfteperspektive.
 Nutze nur Testzugänge. Klicke dabei mindestens eine Kernfunktion durch, nicht nur das Dashboard —
@@ -269,7 +364,7 @@ Tracker sitzen oft in Lern- und Auswertungsansichten.
 Halte je Perspektive fest, welche Bereiche du erreicht hast. Was du nicht erreicht hast, wird nicht
 bewertet, sondern als Testgrenze notiert.
 
-## 8. Belege ablegen
+## 9. Belege ablegen
 
 ```
 belege/<datum>/
@@ -280,6 +375,7 @@ belege/<datum>/
   storage-sus.json          Schritt 3, angemeldet als Schülerperspektive
   aufzeichnung.har          Schritt 4
   seite-*.html              Schritt 6
+  codebefunde.md            Schritt 7, mit Dateipfad und Zeile je Fund
   screenshots/              Consent-Dialog, Footer je Ansicht, Cookie-Liste
   testgrenzen.md            Was nicht geprüft werden konnte und warum
 ```

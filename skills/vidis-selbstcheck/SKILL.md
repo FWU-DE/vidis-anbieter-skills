@@ -61,8 +61,24 @@ Frage den Anbieter, bevor du etwas prüfst. Ohne diese Angaben sind Befunde spä
   kostenloser und bezahlter Variante. Halte fest, welche geprüft wird.
 - **Rechtstexte:** URLs oder Dateien für Impressum, Datenschutzerklärung, AGB, AVV mit Anlagen.
 - **Testzugänge** für Schüler- und Lehrkräfteperspektive, falls angemeldete Bereiche geprüft werden.
-- **Quellcode-Zugriff?** Falls ja, sind CDN-, Tracking- und Fingerprinting-Fundstellen zusätzlich
-  im Code prüfbar.
+- **Quellcode — frage danach, auch wenn er nicht angeboten wird.** Liegt das Repository lokal
+  vor? Dann bitte um den Pfad und nimm es in die Analyse auf. Das ist keine Nebensache: rund ein
+  Drittel der technischen Befunde ist am laufenden Produkt gar nicht sichtbar. Ein Trackingpixel,
+  das über einen Tag-Manager kommt, taucht im Browser erst auf, wenn genau die Seite mit genau der
+  Konfiguration geladen wird — im Code steht es immer. Dasselbe gilt für Cookies in selten
+  erreichten Pfaden, Fingerprinting in Bundles, CDN- und Font-Hosts, Werbe-SDKs und
+  Drittanbieter-Abhängigkeiten.
+
+  Frage konkret nach:
+  - Pfad zum Repository (Monorepo? dann die relevanten Pakete)
+  - Frontend **und** Backend, falls getrennt — Cookies werden oft serverseitig gesetzt
+  - Tag-Manager- oder Consent-Konfiguration, oft ausserhalb des Codes
+  - Abhängigkeitsdateien (`package.json`, `pom.xml`, `requirements.txt`, `go.mod`)
+  - Infrastruktur-Konfiguration für CDN, Fonts und TLS
+
+  Bekommst du keinen Zugriff, ist das kein Problem — halte es als Testgrenze fest und sage klar,
+  welche Kriterien dadurch schwächer belegt sind (RDS-CDN-379, RDS-CUC-373, RDS-CUC-376,
+  RDS-DEV-380). Rate nicht, was im Code stehen könnte.
 
 Lege einen Belegordner an (`belege/<datum>/`) und halte diese Angaben dort als `pruefgegenstand.md`
 fest. Alle späteren Nachweise verweisen darauf.
@@ -70,16 +86,22 @@ fest. Alle späteren Nachweise verweisen darauf.
 ### Phase 2 — Technische Erhebung
 
 Erhebe die messbaren Belege selbst. `references/erhebung.md` enthält die konkreten Befehle,
-Konsolen-Snippets und die Auswertungslogik für jeden Signaltyp:
+Konsolen-Snippets, Suchmuster für den Quellcode und die Auswertungslogik für jeden Signaltyp:
 
 - Transport: http-Aufruf, Weiterleitung, HSTS, veraltete TLS-Versionen — **je Host**
 - Cookies, Local Storage, Session Storage, IndexedDB, Cache Storage, Service Worker
 - Netzwerkaufrufe als HAR-Aufzeichnung; daraus Fremd-Domains, Tracking-, Werbe- und CDN-Aufrufe
 - Trackingpixel und Fingerprinting-Signale
 - Erreichbarkeit und Inhalt der Rechtstexte
+- **Quellcode, falls verfügbar** — die Fundstellen, die der Browser nicht zeigt: Tag-Manager,
+  selten erreichte Pfade, Bundles, CDN- und Font-Hosts, Abhängigkeiten
 
 Führe jeden Durchgang **mit leerem Browserprofil** und **ohne Zustimmung im Consent-Banner** durch.
 Was vor der Zustimmung gesetzt wird, ist der entscheidende Befund.
+
+Liegt Quellcode vor, gilt: **jeder Codefund ist ein Anhaltspunkt, kein Befund.** Toter Code, ein
+abgeschalteter Feature-Flag oder eine Test-Fixture zählen nicht. Bestätige relevante Funde im
+Browser, und schreibe in die Notiz, was du nur im Code gesehen hast — mit Dateipfad und Zeile.
 
 Wiederhole die Erhebung anschließend im **angemeldeten Bereich**, getrennt für Schüler- und
 Lehrkräfteperspektive. Der öffentliche Durchgang übersieht sonst genau die Cookies und Tracker, die
