@@ -2,8 +2,13 @@
 
 > Maßgeblich ist der [Prüfkriterienkatalog VIDIS V0.2](https://www.vidis.schule/wp-content/uploads/sites/10/2024/12/Pruefkriterien-VIDIS-V0.2.pdf).
 
-Phase 5 des Skills hat zwei Teile: den Befund in das Anbieterportal zurückschreiben
-(wenn der Prompt einen Zugang enthält) und ein lesbares Dossier ablegen.
+Wo der Befund landet, entscheidet der Anbieter im VIDIS-Portal pro Angebot. Der
+**Standard ist „nur bei mir"**: dann enthält der Prompt keinen Zugang, es gibt
+nichts zurückzuschreiben, und das Dossier *ist* das Ergebnis — siehe
+[Ohne Portal-Zugang](#ohne-portal-zugang) unten.
+
+Enthält der Prompt Basis-URL und Token, kommen zwei Teile zusammen: den Befund
+zurückschreiben und zusätzlich ein lesbares Dossier ablegen.
 
 ## 1. Befund ins Portal schreiben
 
@@ -81,6 +86,9 @@ alle 26 Kriterien.
 - HTTP 401 heißt: Token unbekannt, widerrufen oder abgelaufen. Bitte den Anbieter,
   im Portal einen neuen Zugang zu erzeugen — versuche es nicht erneut mit demselben
   Token.
+- HTTP 409 `selbstcheck_nur_lokal` heißt: der Anbieter hat das Angebot inzwischen
+  auf „nur bei mir" umgestellt, das Portal speichert für dieses Angebot nichts
+  mehr. Schreib nicht weiter, leg den Befund lokal ab und sag es ihm.
 
 ## 2. Dossier ablegen
 
@@ -142,6 +150,18 @@ benennt, ist der Zweck der Übung.
 
 ## Ohne Portal-Zugang
 
-Enthält der Prompt keinen Zugang, entfällt Schritt 1. Lege den Befund dann als
-`befund.json` im selben Format wie der Request-Body oben ab (`kriterien`,
-`testgrenzen`), damit er später im Portal nachgetragen werden kann.
+Der Regelfall, weil „nur bei mir" der Standard im Portal ist. Schritt 1 entfällt
+vollständig: es gibt keine Basis-URL, kein Token und keinen Endpunkt, den zu
+suchen sich lohnt.
+
+Lege statt dessen zwei Dateien in den Belegordner:
+
+- `dossier.md` wie unter Schritt 2 — hier ist es das Ergebnis, nicht die Beigabe
+  zu einem Portal-Stand.
+- `befund.json` im selben Format wie der Request-Body oben (`kriterien`,
+  `testgrenzen`). Damit kann der Anbieter den Stand später übernehmen, wenn er das
+  Angebot im Portal auf „im VIDIS-Portal" umstellt.
+
+Alles andere bleibt gleich: dieselben Statuswerte, dieselben Regeln für `nachweis`
+und `notiz`, dieselbe Zusammenfassung im Klartext. Der fehlende Zugang macht den
+Selbstcheck nicht weniger verbindlich — er hält das Ergebnis nur beim Anbieter.

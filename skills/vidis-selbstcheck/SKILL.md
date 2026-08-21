@@ -145,9 +145,24 @@ eine **Notiz** mit Begründung und nächstem Schritt.
 Bei `nicht erfüllt` nenne die Behebung aus `references/kriterien.md`, konkret auf den Befund
 bezogen — nicht als allgemeine Empfehlung.
 
-### Phase 5 — Befund zurückschreiben und zusammenfassen
+### Phase 5 — Befund festhalten und zusammenfassen
 
-Enthält der Prompt einen Portal-Zugang (Basis-URL und Token), dann:
+Wo der Befund landet, entscheidet **der Prompt, nicht du**. Der Anbieter wählt das
+im VIDIS-Portal pro Angebot, und der Standard ist „nur bei mir". Lies den Prompt,
+bevor du etwas schreibst:
+
+**Ohne Portal-Zugang — der Regelfall.** Der Prompt nennt keine Basis-URL und kein
+Token. Dann ruf keine Portal-Endpunkte auf und such auch nicht danach: es gibt für
+dieses Angebot keinen Zugang, und das ist eine Entscheidung des Anbieters, kein
+fehlender Konfigurationswert. Lege ab:
+
+- `dossier.md` im Belegordner — die lesbare Fassung samt Erhebungskontext, die zu
+  den Belegen gehört. Das ist hier das Ergebnis, nicht eine Beigabe.
+- `befund.json` im selben Format wie der Portal-Request (`kriterien`,
+  `testgrenzen`), damit der Anbieter den Stand später übernehmen kann, wenn er
+  umstellt.
+
+**Mit Portal-Zugang.** Der Prompt nennt Basis-URL und Token. Dann:
 
 1. Lies zuerst `GET /agent/selbstcheck` — der Kriterienkatalog von dort ist
    maßgeblich, und `kriterien` zeigt, was ein früherer Durchgang schon eingetragen
@@ -156,22 +171,47 @@ Enthält der Prompt einen Portal-Zugang (Basis-URL und Token), dann:
    Kriterien, die du geprüft hast; nicht übermittelte behalten ihren Stand, du
    kannst also in mehreren Durchgängen berichten.
 3. Halte in `testgrenzen` fest, was du nicht prüfen konntest und warum.
+4. Lege `dossier.md` trotzdem ab — das Portal hält den Stand je Kriterium, das
+   Dossier den Erhebungskontext, der zu den Belegen gehört.
 
 Der Zugang gilt nur für dieses eine Angebot und läuft nach kurzer Zeit ab. Bei
 HTTP 401 bitte den Anbieter um einen neuen Zugang im Portal — versuche es nicht
-erneut mit demselben Token.
-
-Lege zusätzlich `dossier.md` im Belegordner ab: die lesbare Fassung samt
-Erhebungskontext, die zu den Belegen gehört.
-
-Ohne Portal-Zugang legst du den Befund als `befund.json` ab, damit er später
-nachgetragen werden kann.
+erneut mit demselben Token. Bei HTTP 409 `selbstcheck_nur_lokal` hat der Anbieter
+inzwischen auf „nur bei mir" umgestellt: schreib nicht weiter, sondern leg den
+Befund lokal ab und sag es ihm.
 
 Format und Statuswerte stehen in `references/dossier.md`.
 
 Schließe mit einer **Zusammenfassung im Klartext**: wie viele Kriterien erfüllt,
 was blockiert eine Freigabe, welche drei Punkte sind zuerst anzugehen, und welche
 Entscheidungen brauchen eine fachlich verantwortliche Person.
+
+## Rückmeldung zu diesem Skill
+
+Dieser Skill ist eine Arbeitshilfe zu FWU's Kriterienkatalog, und er ist an den
+Stellen ungenau, an denen noch niemand geprüft hat. Du arbeitest ihn gerade an
+einem echten Produkt durch — das ist die Gelegenheit, ihn zu verbessern.
+
+Reiche im Skill-Repository
+([FWU-DE/vidis-anbieter-skills](https://github.com/FWU-DE/vidis-anbieter-skills))
+ein **Issue oder einen Pull Request** ein, wenn dir auffällt:
+
+- Eine Prüfanleitung, ein Suchmuster oder ein Befehl funktioniert nicht mehr oder
+  liefert etwas anderes als beschrieben.
+- Eine Stolperfalle fehlt, die dich hier Zeit gekostet hat.
+- Eine Formulierung ist mehrdeutig oder widerspricht dem
+  [Originalkatalog](https://www.vidis.schule/wp-content/uploads/sites/10/2024/12/Pruefkriterien-VIDIS-V0.2.pdf).
+  Der Katalog gewinnt — dann ist die Arbeitshilfe falsch.
+- Ein Kriterium braucht eine Präzisierung, damit es reproduzierbar bewertbar ist.
+
+Präzisierungen an den Kriterien selbst gehören in `content/kriterien-v0_2.yaml`,
+nicht in die generierten Dateien (`references/kriterien.md`, `dist/selbstcheck.json`)
+— siehe die README des Repos.
+
+**Frag den Anbieter, bevor du etwas einreichst**, und nimm nichts aus diesem
+Durchgang mit: keine Belege, keine Hostnamen, keine Zugangsdaten, keine
+Screenshots, keinen Produktnamen. Ein brauchbarer Beitrag beschreibt die Lücke in
+der Anleitung, nicht den Befund am Angebot.
 
 ## Referenzen
 

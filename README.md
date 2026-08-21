@@ -21,23 +21,36 @@ Der Selbstcheck bereitet darauf vor; er ersetzt die Prüfung nicht.
 | `skills/vidis-selbstcheck/` | Der Selbstcheck-Skill: Ablauf, Kriterienreferenz, Erhebungstechniken, Dossier-Format |
 | `content/kriterien-v0_2.yaml` | Kriterienregistry — Code, Name, Prüfbereich, Pflichtstatus, Kriteriumstext |
 | `content/selbstcheck-guide-v0_2.yaml` | Anleitungsinhalte je Kriterium — die einzige Quelle für alle Ausgaben |
-| `dist/selbstcheck.json` | Datenmodell aller Kriterien samt Anleitungsinhalten — Quelle für den Kriterienkatalog im Anbieterportal |
+| `dist/selbstcheck.json` | Datenmodell aller Kriterien samt Anleitungsinhalten — Quelle für den Kriterienkatalog im VIDIS-Portal |
 | `tools/build.py` | Generator: erzeugt `dist/` und die Kriterienreferenz des Skills |
 
 ## Wie das zusammenspielt
 
-Der Selbstcheck ist ein **im BMI Anbieterportal geführter Prozess**, je dort
-angelegtem Angebot. Das Portal führt selbst keine Prüfung durch — es hält den
-Kriterienkatalog, den Bearbeitungsstand und die Nachweise.
+Der Selbstcheck wird im **VIDIS-Portal** angestoßen, je dort geführtem Angebot. Er
+ist dort verlinkt, wo die Datenschutzprüfung erklärt wird — er bereitet genau diese
+externe Prüfung vor. Das Portal prüft selbst nichts; es hält den Kriterienkatalog
+und erzeugt den Prompt.
 
-Die Erhebung macht der Anbieter mit **seinem eigenen Agenten**:
+Die Erhebung macht der Anbieter in beiden Fällen mit **seinem eigenen Agenten**.
+Wo das Ergebnis liegt, entscheidet er pro Angebot:
+
+**„Nur bei mir" — der Standard.**
+
+1. Im Portal den Prompt anzeigen. Er enthält keinen Zugang und kein Token.
+2. Prompt in den eigenen Agenten einfügen. Der Prompt verweist auf den Skill aus
+   diesem Repo — der Agent holt sich die aktuelle Kriterienanleitung also hier,
+   nicht aus einer im Prompt eingefrorenen Kopie.
+3. Der Agent erhebt die Belege lokal und legt `dossier.md` und `befund.json` beim
+   Anbieter ab. Im Portal wird zu diesem Angebot kein Status, kein Nachweis und
+   keine Notiz gespeichert.
+
+**„Im VIDIS-Portal" — wenn der Anbieter Bewertung, Verlauf und Bericht dort haben
+will.**
 
 1. Im Portal am Angebot einen Zugang erzeugen. Das Portal liefert einen
    kopierbaren Prompt mit einem Token, das ausschließlich für dieses eine Angebot
    gilt und nach kurzer Zeit verfällt.
-2. Prompt in den eigenen Agenten einfügen. Der Prompt verweist auf den Skill aus
-   diesem Repo — der Agent holt sich die aktuelle Kriterienanleitung also hier,
-   nicht aus einer im Prompt eingefrorenen Kopie.
+2. Prompt in den eigenen Agenten einfügen — wie oben.
 3. Der Agent liest über `GET /agent/selbstcheck` den Angebotskontext und den
    Katalog, erhebt die Belege lokal und schreibt die Befunde über
    `PUT /agent/selbstcheck/befund` zurück.
@@ -50,8 +63,8 @@ computer-use-fähigen Agenten, der den Skill laden kann.
 ## Skill benutzen
 
 Den Ordner `skills/vidis-selbstcheck/` in das Skill-Verzeichnis des Agenten legen.
-Im Regelfall reicht der Prompt aus dem Portal; der Skill lässt sich aber auch ohne
-Portal-Zugang für eine reine Vorabprüfung anstoßen.
+Im Regelfall reicht der Prompt aus dem Portal; der Skill lässt sich aber auch ganz
+ohne Portal für eine reine Vorabprüfung anstoßen.
 
 **Voraussetzungen:** ein Browser mit Entwicklerwerkzeugen, `curl`, `openssl`, `jq`.
 Kein weiteres Werkzeug nötig.
@@ -68,10 +81,12 @@ Das erzeugt `dist/selbstcheck.json` und
 `skills/vidis-selbstcheck/references/kriterien.md` neu. Diese beiden Dateien werden **nicht** von
 Hand bearbeitet.
 
-Ändert sich der Katalog, muss die Kopie im Anbieterportal
-(`services/anbieter-service/src/main/resources/selbstcheck/katalog-v0_2.json`)
-mitgezogen werden — sie ist dort als Ressource eingebettet, damit das Portal nicht
-zur Laufzeit von diesem Repo abhängt.
+Ändert sich der Katalog, müssen die eingebetteten Kopien in den Portalen
+mitgezogen werden — sie liegen dort als Ressource, damit ein Portal zur Laufzeit
+nicht von diesem Repo abhängt:
+
+- VIDIS-Portal: `services/vidis-service/src/main/resources/selbstcheck/katalog-v0_2.json`
+- BMI Anbieterportal: `services/anbieter-service/src/main/resources/selbstcheck/katalog-v0_2.json`
 
 Prüfen, dass Registry und Anleitung deckungsgleich sind:
 
@@ -80,6 +95,28 @@ python3 tools/check.py
 ```
 
 Benötigt nur PyYAML.
+
+## Beitragen
+
+Rückmeldungen sind ausdrücklich erwünscht, gerade von Agenten, die den Skill
+gerade an einem echten Produkt durchgearbeitet haben. Issues und Pull Requests
+für:
+
+- Prüfanleitungen, Suchmuster oder Befehle, die nicht mehr funktionieren oder
+  etwas anderes liefern als beschrieben
+- fehlende Stolperfallen
+- mehrdeutige Formulierungen, oder solche, die dem
+  [Originalkatalog](https://www.vidis.schule/wp-content/uploads/sites/10/2024/12/Pruefkriterien-VIDIS-V0.2.pdf)
+  widersprechen — der Katalog gewinnt, dann ist die Arbeitshilfe falsch
+- Präzisierungen, die ein Kriterium reproduzierbar bewertbar machen
+
+Inhaltliche Änderungen gehören nach `content/` und werden über `tools/build.py`
+generiert; `references/kriterien.md` und `dist/` werden nicht von Hand bearbeitet.
+
+Ein Beitrag beschreibt die Lücke in der Anleitung, **nicht den Befund am
+geprüften Angebot**: keine Belege, Hostnamen, Zugangsdaten, Screenshots oder
+Produktnamen aus einem Durchgang. Wer im Auftrag eines Anbieters prüft, fragt
+diesen vorher.
 
 ## Abgrenzung
 
