@@ -111,9 +111,43 @@ steht in den Entwicklerwerkzeugen unter *Application → Cookies* — sichere si
 3. Ist er einwilligungsbedürftig? Dann darf er bei Zielgruppe SuS nicht ohne Weiteres gesetzt werden.
 4. Steht er in der Datenschutzerklärung, mit Zweck, Anbieter und Speicherdauer? (RDS-CUC-453)
 
-**Einstufung.** Die öffentliche [Open Cookie Database (EDPB)](https://github.com/jkwakman/Open-Cookie-Database)
-stuft verbreitete Cookie-Namen ein. Für einen Namen ohne Treffer gilt: nicht automatisch harmlos,
-sondern prüfpflichtig — der Anbieter muss den Zweck belegen.
+**Einstufung.** Lass die Namen einstufen, statt selbst zu raten.
+
+*Mit Portal-Zugang* — der Endpunkt kennt die Datenbank und liefert je Name eine Begründung:
+
+```bash
+curl -sS -X POST "$BASIS_URL/agent/selbstcheck/cookie-einstufung" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H 'Content-Type: application/json' \
+  -d '{"namen":["_ga","PHPSESSID","lernwelt_fortschritt"]}' | jq .
+```
+
+Antwort je Name: `einstufung` (`TECHNISCH_ERFORDERLICH`, `EINWILLIGUNGSBEDUERFTIG`,
+`PRUEFPFLICHTIG`), `begruendung`, und bei Datenbanktreffern Plattform, Kategorie, Zweck und
+Speicherdauer. Nimm die Begründung in die Notiz auf — sie ist der Teil, den die Prüfung lesen kann.
+
+*Ohne Portal-Zugang* — dieselben Regeln von Hand, Datengrundlage
+[Open Cookie Database (EDPB)](https://github.com/jkwakman/Open-Cookie-Database) (Apache-2.0):
+
+| Kategorie der Datenbank | Einstufung |
+|---|---|
+| `Functional`, `Security` | meist technisch erforderlich |
+| `Analytics`, `Marketing`, `Personalization` | meist einwilligungsbedürftig |
+| kein Treffer | prüfpflichtig |
+
+Greift die Datenbank nicht, hilft der Name: Präfixe wie `_ga`, `_gid`, `_gat`, `_hj`, `fbp`,
+`fbc`, `mp_`, `amplitude_`, `ajs_` deuten auf Tracking; `session`, `csrf`, `xsrf`, `phpsessid`,
+`jsessionid`, `consent`, `cookieconsent` auf betrieblich Erforderliches.
+
+**Drei Dinge, die du dabei nicht verwechseln darfst:**
+
+1. **Ein Treffer ist ein Hinweis, keine Bewertung.** Die Datenbank sagt, wie ein Name im Web
+   üblicherweise genutzt wird — nicht, ob der Cookie in *diesem* Angebot erforderlich ist.
+2. **„Prüfpflichtig" heißt nicht harmlos.** Es heißt: der Zweck ist unbelegt. Setze dafür
+   `KLAERUNG_NOETIG` und frage den Anbieter, wozu der Cookie dient.
+3. **Setze aus einer Einstufung allein kein `ERFUELLT`.** Dass alle Cookies als funktional
+   gelten, belegt nicht, dass keine anderen gesetzt werden — nur dass die gefundenen unauffällig
+   sind.
 
 Typisch nicht erforderlich: Analyse, A/B-Test, Marketing, Social Media, externe Video-Player,
 Tag-Manager.
